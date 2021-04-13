@@ -52,8 +52,8 @@ jobs:
         id: get_log
         run: |
           declare LOG=$(git --no-pager log --since yesterday --pretty=format:%h%x09%an%x09%ad%x09%s --date short)
-          echo "::set-output name=log::$(echo $LOG)"
-          echo "::set-output name=log-num::$(echo $LOG| grep -c '')"
+          echo "::set-output name=log::$(echo "$LOG")"
+          echo "::set-output name=log-num::$(echo "$LOG"| grep -c '')"
       - name: Create release
         id: create_release
         if: ${{steps.get_log.outputs.log-num > 0}}
@@ -222,7 +222,7 @@ jobs:
         fi
 
     - name: Publish
-      if: ${{ matrix.target == "x86_64-unknown-linux-musl" }}
+      if: ${{ matrix.target == 'x86_64-unknown-linux-musl' }}
       uses: softprops/action-gh-release@v1
       with:
         files: 'dcompass*'
@@ -232,7 +232,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Publish (no notes)
-      if: ${{ matrix.target != "x86_64-unknown-linux-musl" }}
+      if: ${{ matrix.target != 'x86_64-unknown-linux-musl' }}
       uses: softprops/action-gh-release@v1
       with:
         files: 'dcompass*'
